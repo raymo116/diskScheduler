@@ -123,7 +123,7 @@ int SSTF(int init_pos, int_array* requests) {
     return sum;
 }
 
-int SCAN(int init_pos, int_array* requests) {
+int SCAN_base(int init_pos, int_array* requests, int is_circular, int is_look) {
 
     int_array left, right;
     left.content = malloc(sizeof(int)*10);
@@ -146,8 +146,10 @@ int SCAN(int init_pos, int_array* requests) {
         }
     }
 
-    if (direction == LEFT) pushback(0, &left);
-    else if (direction == RIGHT) pushback(max, &right);
+    if(is_look != 1) {
+        if (direction == LEFT) pushback(0, &left);
+        else if (direction == RIGHT) pushback(max, &right);
+    }
 
     for (n = 0; n < requests->len; n++) {
         if (requests->content[n] < init_pos)
@@ -156,8 +158,14 @@ int SCAN(int init_pos, int_array* requests) {
             pushback(requests->content[n], &right);
     }
 
-    sort_int_array(&left, -1);
-    sort_int_array(&right, 1);
+    if(is_circular == 1) {
+        sort_int_array(&left, direction);
+        sort_int_array(&right, direction);
+    }
+    else {
+        sort_int_array(&left, -1);
+        sort_int_array(&right, 1);
+    }
 
     int sum= 0;
     for(n = RIGHT; n > -2; n-=2) {
@@ -183,6 +191,22 @@ int SCAN(int init_pos, int_array* requests) {
     delete_int_array(&right);
     delete_int_array(&left);
     return sum;
+}
+
+int SCAN(int init_pos, int_array* requests) {
+    return SCAN_base(init_pos, requests, 0, 0);
+}
+
+int CSCAN(int init_pos, int_array* requests) {
+    return SCAN_base(init_pos, requests, 1, 0);
+}
+
+int LOOK(int init_pos, int_array* requests) {
+    return SCAN_base(init_pos, requests, 0, 1);
+}
+
+int CLOOK(int init_pos, int_array* requests) {
+    return SCAN_base(init_pos, requests, 1, 1);
 }
 
 #endif
