@@ -123,11 +123,7 @@ int SCAN_base(int init_pos, int_array* requests, int is_circular, int is_look) {
             pushback(MIN_VAL, &left);
             pushback(MAX_VAL, &right);
         }
-        else {
-            // if (direction == LEFT) pushback(MIN_VAL, &left);
-            // else if (direction == RIGHT)
-            pushback(MAX_VAL, &right);
-        }
+        else pushback(MAX_VAL, &right);
     }
 
     int n;
