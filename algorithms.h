@@ -17,8 +17,9 @@
 
 #define LEFT -1
 #define RIGHT 1
-#define MAX_VAL 4999
+#define MAX_VAL 199
 #define MIN_VAL 0
+#define INT_MAX 2147483647
 
 /* first come first serve calgorithm */
 int FCFS(int init_pos, int_array* requests) {
@@ -44,8 +45,8 @@ int SSTF(int init_pos, int_array* requests) {
     sort_int_array(ord_req, 1);
 
     /* find the place closest to the start */
-    int index = 0;
-    while(ord_req->content[index] < init_pos) ++index;
+    int index = -1;
+    while(ord_req->content[index+1] < init_pos) ++index;
 
     /* finds the numbers to compare */
     int right, left;
@@ -62,11 +63,15 @@ int SSTF(int init_pos, int_array* requests) {
     }
 
     /* cycle though, always finding the request that is closest */
-    int right_delta, left_delta, sum = 0;
+    int right_delta, left_delta;
+    int sum = abs(ord_req->content[index]-init_pos);
     while(1) {
         /* calculate the right and left distances */
-        right_delta = abs(ord_req->content[right]-ord_req->content[index]);
-        left_delta = abs(ord_req->content[left]-ord_req->content[index]);
+        if(left > -1) left_delta = abs(ord_req->content[left]-ord_req->content[index]);
+        else left_delta = INT_MAX;
+
+        if(right < ord_req->len) right_delta = abs(ord_req->content[right]-ord_req->content[index]);
+        else right_delta = INT_MAX;
 
         /* if it's shorter to the left, go left */
         if((right_delta > left_delta) && left > -1) {
@@ -111,20 +116,21 @@ int SCAN_base(int init_pos, int_array* requests, int is_circular, int is_look) {
     /* the direction on the disk */
     int direction=0;
 
-    /* Find which direction to start in */
     int n;
-    /* start going through the requests */
-    for (n = 0; n < requests->len; ++n) {
+    if(is_circular != 1) {
+        /* Find which direction to start in */
+        int delta, max_delta = INT_MAX;
+        /* start going through the requests */
+        for (n = 0; n < requests->len; ++n) {
 
-        /* ignore all of the ones that require no head movement */
-        if(requests->content[n] != init_pos) {
-
-            /* find which direction is the first one we move in */
-            if(requests->content[n] > init_pos) direction = RIGHT;
-            else direction = LEFT;
-            break;
+            delta = abs(requests->content[n]-init_pos);
+            if(delta < max_delta) {
+                max_delta = delta;
+                if(requests->content[n] > init_pos) direction = RIGHT;
+                else direction = LEFT;
+            }
         }
-    }
+    } else direction = RIGHT;
 
     /* if we're not supposed to look ahead (so SCAN and C-SCAN), then we need
     to go all the way to the edge of the disk before changing direction */
