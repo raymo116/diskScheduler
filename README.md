@@ -15,6 +15,10 @@ gcc -ansi -w diskScheduler.c -o diskScheduler
 ./diskScheduler <initial cylinder position> <cylinder request file>
 ```
 
+## Questions
+- What is the initial head direction
+    - move to the right in all scans/looks
+
 ## Sources
 - **General C**
     - https://stackoverflow.com/questions/9410/how-do-you-pass-a-function-as-a-parameter-in-c

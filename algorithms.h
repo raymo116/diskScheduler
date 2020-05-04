@@ -114,23 +114,7 @@ int SCAN_base(int init_pos, int_array* requests, int is_circular, int is_look) {
     right.tail = 0;
 
     /* the direction on the disk */
-    int direction=0;
-
-    int n;
-    if(is_circular != 1) {
-        /* Find which direction to start in */
-        int delta, max_delta = INT_MAX;
-        /* start going through the requests */
-        for (n = 0; n < requests->len; ++n) {
-
-            delta = abs(requests->content[n]-init_pos);
-            if(delta < max_delta) {
-                max_delta = delta;
-                if(requests->content[n] > init_pos) direction = RIGHT;
-                else direction = LEFT;
-            }
-        }
-    } else direction = RIGHT;
+    int direction=RIGHT;
 
     /* if we're not supposed to look ahead (so SCAN and C-SCAN), then we need
     to go all the way to the edge of the disk before changing direction */
@@ -140,11 +124,13 @@ int SCAN_base(int init_pos, int_array* requests, int is_circular, int is_look) {
             pushback(MAX_VAL, &right);
         }
         else {
-            if (direction == LEFT) pushback(MIN_VAL, &left);
-            else if (direction == RIGHT) pushback(MAX_VAL, &right);
+            // if (direction == LEFT) pushback(MIN_VAL, &left);
+            // else if (direction == RIGHT)
+            pushback(MAX_VAL, &right);
         }
     }
 
+    int n;
     /* add requests to the vectors */
     for (n = 0; n < requests->len; n++) {
         if (requests->content[n] < init_pos)
