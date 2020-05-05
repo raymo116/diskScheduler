@@ -17,7 +17,7 @@
 
 #define LEFT -1
 #define RIGHT 1
-#define MAX_VAL 199
+#define MAX_VAL 4999
 #define MIN_VAL 0
 #define INT_MAX 2147483647
 
