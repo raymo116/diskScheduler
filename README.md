@@ -15,17 +15,13 @@ gcc -ansi -w diskScheduler.c -o diskScheduler
 ./diskScheduler <initial cylinder position> <cylinder request file>
 ```
 
-## Questions
-- What is the initial head direction
-    - move to the right in all scans/looks
-
 ## Sources
 - **General C**
     - https://stackoverflow.com/questions/9410/how-do-you-pass-a-function-as-a-parameter-in-c
     - https://stackoverflow.com/questions/5309859/how-to-define-an-array-of-functions-in-c
 - **FCFS**
     - https://www.guru99.com/fcfs-scheduling.html
--**SSTF**
+- **SSTF**
     - https://www.geeksforgeeks.org/disk-scheduling-algorithms/
     - https://en.wikipedia.org/wiki/Shortest_seek_first
 - **SCAN**
